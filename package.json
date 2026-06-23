@@ -1,0 +1,8 @@
+{
+  "name": "ma_guia_atdd_ahorcado",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "at": "bddgen && playwright test"
+  }
+}
