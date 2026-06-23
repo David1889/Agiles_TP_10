@@ -26,4 +26,12 @@ describe("Ahorcado", () => {
     expect(juego.palabraEnmascarada()).toBe("_ A _ A");
     expect(juego.vidas()).toBe(6);
   });
+
+  it("descuenta una vida cuando la letra no pertenece a la palabra", () => {
+  const juego = new Ahorcado("CASA");
+
+  juego.adivinar("E");
+
+  expect(juego.vidas()).toBe(5);
+});
 });
