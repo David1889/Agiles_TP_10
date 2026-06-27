@@ -93,7 +93,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/proyectos/agiles_tp
-            git pull origin main
+            git fetch origin
+            git reset --hard origin/main
             npm ci
             npm run build
             sudo systemctl reload nginx

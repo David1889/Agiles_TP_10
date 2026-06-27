@@ -31,4 +31,10 @@ export class Ahorcado {
   vidas(): number {
     return this.intentos;
   }
+
+  haGanado(): boolean {
+    return this.palabra
+      .split("")
+      .every((letra) => this.letrasAdivinadas.has(letra.toUpperCase()));
+  }
 }
