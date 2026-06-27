@@ -1,3 +1,4 @@
+# language: es
 Característica: Fallar letra
 
 Escenario: El jugador falla una letra

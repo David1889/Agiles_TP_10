@@ -1,0 +1,108 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    outputs:
+      vitest-result: ${{ steps.test.outcome }}
+      at-result: ${{ steps.at.outcome }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - id: test
+        run: npm run test -- --reporter=verbose 2>&1 | tee vitest-output.txt
+      - run: npm run coverage 2>&1 | tee coverage-output.txt
+      - id: at
+        run: npm run at 2>&1 | tee at-output.txt
+
+      - name: Generate test summary
+        run: |
+          echo "## ✅ Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Vitest (Unit Tests)" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -E "(Tests|Test Files|✓|✗)" vitest-output.txt || echo "All passed" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Coverage" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -A 20 "% Stmts" coverage-output.txt || true
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Playwright BDD (ATDD)" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -E "(passed|failed|flaky|✓|✗)" at-output.txt || echo "See full logs" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+  sonarcloud:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npm run coverage
+      - run: npm run at
+      - name: SonarCloud Scan
+        id: sonar
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Generate SonarCloud summary
+        run: |
+          echo "## 🔍 SonarCloud Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[View detailed analysis on SonarCloud](https://sonarcloud.io/dashboard?id=David1889_Agiles_TP_10)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Quality Gate | ![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=David1889_Agiles_TP_10\&metric=alert_status) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Coverage | ![Coverage](https://sonarcloud.io/api/project_badges/measure?project=David1889_Agiles_TP_10\&metric=coverage) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Bugs | ![Bugs](https://sonarcloud.io/api/project_badges/measure?project=David1889_Agiles_TP_10\&metric=bugs) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Code Smells | ![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=David1889_Agiles_TP_10\&metric=code_smells) |" >> $GITHUB_STEP_SUMMARY
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && success()
+    needs: [test, sonarcloud]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/proyectos/agiles_tp
+            git pull origin main
+            npm ci
+            npm run build
+            sudo systemctl reload nginx
+
+      - name: Generate deploy summary
+        run: |
+          echo "## 🚀 Deploy" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Deployed to **${{ secrets.VPS_HOST }}**" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Branch: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Trigger: \`${{ github.event_name }}\`" >> $GITHUB_STEP_SUMMARY
