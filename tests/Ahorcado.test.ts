@@ -34,4 +34,24 @@ describe("Ahorcado", () => {
 
   expect(juego.vidas()).toBe(5);
 });
+
+  it("no ha ganado al inicio", () => {
+    const juego = new Ahorcado("SOL");
+    expect(juego.haGanado()).toBe(false);
+  });
+
+  it("no ha ganado si quedan letras sin adivinar", () => {
+    const juego = new Ahorcado("SOL");
+    juego.adivinar("S");
+    juego.adivinar("O");
+    expect(juego.haGanado()).toBe(false);
+  });
+
+  it("ha ganado al adivinar todas las letras", () => {
+    const juego = new Ahorcado("SOL");
+    juego.adivinar("S");
+    juego.adivinar("O");
+    juego.adivinar("L");
+    expect(juego.haGanado()).toBe(true);
+  });
 });
