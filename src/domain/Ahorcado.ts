@@ -1,11 +1,12 @@
 export class Ahorcado {
-  private palabra: string;
+  private static readonly VIDAS_INICIALES = 6;
+  private readonly palabra: string;
   private intentos: number;
   private letrasAdivinadas: Set<string>;
 
   constructor(palabra: string) {
-    this.palabra = palabra;
-    this.intentos = 6;
+    this.palabra = palabra.toUpperCase();
+    this.intentos = Ahorcado.VIDAS_INICIALES;
     this.letrasAdivinadas = new Set();
   }
 
@@ -14,7 +15,7 @@ export class Ahorcado {
 
     this.letrasAdivinadas.add(letraMayuscula);
 
-    if (!this.palabra.toUpperCase().includes(letraMayuscula)) {
+    if (!this.palabra.includes(letraMayuscula)) {
       this.intentos--;
     }
   }
@@ -23,7 +24,7 @@ export class Ahorcado {
     return this.palabra
       .split("")
       .map((caracter) =>
-        this.letrasAdivinadas.has(caracter.toUpperCase()) ? caracter : "_"
+        this.letrasAdivinadas.has(caracter) ? caracter : "_"
       )
       .join(" ");
   }
@@ -35,6 +36,6 @@ export class Ahorcado {
   haGanado(): boolean {
     return this.palabra
       .split("")
-      .every((letra) => this.letrasAdivinadas.has(letra.toUpperCase()));
+      .every((letra) => this.letrasAdivinadas.has(letra));
   }
 }
