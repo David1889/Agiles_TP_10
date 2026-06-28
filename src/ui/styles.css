@@ -1,0 +1,166 @@
+:root {
+  --bg: #f7f7f8;
+  --surface: #ffffff;
+  --border: #d3d6da;
+  --text: #1a1a1b;
+  --muted: #787c7e;
+  --accent: #6aaa64;
+  --accent-strong: #5c9a57;
+  --danger: #c14b4b;
+  --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  --radius: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121213;
+    --surface: #1e1e20;
+    --border: #3a3a3c;
+    --text: #f5f5f5;
+    --muted: #9aa0a6;
+    --accent: #6aaa64;
+    --accent-strong: #79b473;
+    --danger: #e07a7a;
+    --shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.game {
+  width: 100%;
+  max-width: 440px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.game__header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+.game__title {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 32px 24px 36px;
+}
+
+.word {
+  font-family: "Courier New", ui-monospace, monospace;
+  font-size: clamp(2rem, 7vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  word-break: break-word;
+  padding: 18px 22px;
+  min-width: 60%;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 2px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+}
+
+.lives {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  font-weight: 600;
+}
+
+.lives__label {
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+}
+
+.lives__label::before {
+  content: "\2665";
+  color: var(--danger);
+  margin-right: 6px;
+}
+
+.lives__count {
+  font-size: 1.3rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.message {
+  min-height: 1.6em;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: var(--accent-strong);
+}
+
+.controls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.guess {
+  width: 100%;
+  max-width: 220px;
+  padding: 12px 16px;
+  font-size: 1.4rem;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.guess:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.guess:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}

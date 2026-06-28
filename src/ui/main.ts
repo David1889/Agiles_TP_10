@@ -1,4 +1,5 @@
 import { Ahorcado } from "../domain/Ahorcado";
+import "./styles.css";
 
 const root = document.getElementById("app");
 
@@ -9,12 +10,34 @@ function readWordFromQuery(): string {
 
 if (root) {
   root.innerHTML = `
-    <div>
-      <div data-testid="word">_ _ _ _</div>
-      <div data-testid="lives">6</div>
-      <input type="text" id="guess-input" />
-      <div data-testid="message"></div>
-    </div>
+    <main class="game">
+      <header class="game__header">
+        <h1 class="game__title">Ahorcado</h1>
+      </header>
+
+      <section class="board">
+        <div class="word" data-testid="word">_ _ _ _</div>
+
+        <div class="lives">
+          <span class="lives__label">Vidas</span>
+          <span class="lives__count" data-testid="lives">6</span>
+        </div>
+
+        <div class="message" data-testid="message"></div>
+
+        <div class="controls">
+          <input
+            class="guess"
+            type="text"
+            id="guess-input"
+            placeholder="Letra"
+            autocomplete="off"
+            aria-label="Adivinar una letra"
+          />
+          <p class="hint">Escribí una letra y presioná Enter</p>
+        </div>
+      </section>
+    </main>
   `;
 
   const palabra = readWordFromQuery();
