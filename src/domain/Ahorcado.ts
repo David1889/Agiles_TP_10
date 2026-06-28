@@ -13,11 +13,17 @@ export class Ahorcado {
   adivinar(letra: string): void {
     const letraMayuscula = letra.toUpperCase();
 
+    if (this.letrasAdivinadas.has(letraMayuscula)) return;
+
     this.letrasAdivinadas.add(letraMayuscula);
 
     if (!this.palabra.includes(letraMayuscula)) {
       this.intentos--;
     }
+  }
+
+  fueIntentada(letra: string): boolean {
+    return this.letrasAdivinadas.has(letra.toUpperCase());
   }
 
   palabraEnmascarada(): string {
