@@ -54,4 +54,27 @@ describe("Ahorcado", () => {
     juego.adivinar("L");
     expect(juego.haGanado()).toBe(true);
   });
+
+  it("no ha perdido al inicio", () => {
+    const juego = new Ahorcado("SOL");
+    expect(juego.haPerdido()).toBe(false);
+  });
+
+  it("no ha perdido si todavía quedan vidas", () => {
+    const juego = new Ahorcado("SOL");
+    juego.adivinar("B");
+    juego.adivinar("C");
+    expect(juego.haPerdido()).toBe(false);
+  });
+
+  it("ha perdido al agotar las 6 vidas", () => {
+    const juego = new Ahorcado("SOL");
+    "BCDFGH".split("").forEach((letra) => juego.adivinar(letra));
+    expect(juego.haPerdido()).toBe(true);
+  });
+
+  it("revela la palabra completa", () => {
+    const juego = new Ahorcado("SOL");
+    expect(juego.palabraRevelada()).toBe("S O L");
+  });
 });
