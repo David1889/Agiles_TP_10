@@ -110,4 +110,54 @@ describe("Ahorcado", () => {
 
     expect(juego.fueIntentada("A")).toBe(false);
   });
+
+  it("esLetraValida es true para una sola letra", () => {
+    const juego = new Ahorcado("CASA");
+    expect(juego.esLetraValida("A")).toBe(true);
+    expect(juego.esLetraValida("z")).toBe(true);
+  });
+
+  it("esLetraValida es false para algo que no es una sola letra", () => {
+    const juego = new Ahorcado("CASA");
+    expect(juego.esLetraValida("5")).toBe(false);
+    expect(juego.esLetraValida("%")).toBe(false);
+    expect(juego.esLetraValida("AB")).toBe(false);
+    expect(juego.esLetraValida("")).toBe(false);
+  });
+
+  it("adivinar una entrada que no es letra no penaliza ni revela nada", () => {
+    const juego = new Ahorcado("CASA");
+
+    juego.adivinar("5");
+
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _");
+    expect(juego.vidas()).toBe(6);
+  });
+
+  it("juegoTerminado es false mientras la partida sigue", () => {
+    const juego = new Ahorcado("SOL");
+    expect(juego.juegoTerminado()).toBe(false);
+  });
+
+  it("juegoTerminado es true cuando se ganó", () => {
+    const juego = new Ahorcado("SOL");
+    "SOL".split("").forEach((letra) => juego.adivinar(letra));
+    expect(juego.juegoTerminado()).toBe(true);
+  });
+
+  it("juegoTerminado es true cuando se perdió", () => {
+    const juego = new Ahorcado("SOL");
+    "BCDFGH".split("").forEach((letra) => juego.adivinar(letra));
+    expect(juego.juegoTerminado()).toBe(true);
+  });
+
+  it("adivinar no cambia el estado si la partida ya terminó", () => {
+    const juego = new Ahorcado("SOL");
+    "SOL".split("").forEach((letra) => juego.adivinar(letra));
+
+    juego.adivinar("X");
+
+    expect(juego.vidas()).toBe(6);
+    expect(juego.haGanado()).toBe(true);
+  });
 });
