@@ -6,6 +6,21 @@ describe("Ahorcado - Palabra al azar de una lista", () => {
     const juego = new Ahorcado(["SOL", "RELOJ", "AVION"], 0);
     expect(juego.palabraEnmascarada()).toBe("_ _ _");
   });
+
+  it("con seed 1 elige la segunda palabra de la lista", () => {
+    const juego = new Ahorcado(["SOL", "RELOJ", "AVION"], 1);
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _ _");
+  });
+
+  it("usa la lista por defecto cuando no se especifican palabras", () => {
+    const juego = new Ahorcado([], 0);
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _");
+  });
+
+  it("sigue funcionando con el constructor de string", () => {
+    const juego = new Ahorcado("CASA");
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _");
+  });
 });
 
 describe("Ahorcado", () => {
