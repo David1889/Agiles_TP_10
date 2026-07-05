@@ -1,13 +1,29 @@
 export class Ahorcado {
   private static readonly VIDAS_INICIALES = 6;
+  static readonly PALABRAS_POR_DEFECTO = [
+    "CASA", "GATO", "SOL", "PERRO", "AVION",
+    "ARBOL", "FLOR", "LUNA", "NUBE", "RATON",
+  ];
   private readonly palabra: string;
   private intentos: number;
   private letrasAdivinadas: Set<string>;
 
-  constructor(palabra: string) {
-    this.palabra = palabra.toUpperCase();
+  constructor(palabra: string);
+  constructor(palabras: string[], seed: number);
+  constructor(palabraOLista: string | string[], seed?: number) {
+    if (typeof palabraOLista === "string") {
+      this.palabra = palabraOLista.toUpperCase();
+    } else {
+      const lista = palabraOLista.length > 0 ? palabraOLista : Ahorcado.PALABRAS_POR_DEFECTO;
+      this.palabra = Ahorcado.seleccionarPalabra(lista, seed ?? 0).toUpperCase();
+    }
     this.intentos = Ahorcado.VIDAS_INICIALES;
     this.letrasAdivinadas = new Set();
+  }
+
+  private static seleccionarPalabra(lista: string[], seed: number): string {
+    const index = ((seed * 2654435761) >>> 0) % lista.length;
+    return lista[index];
   }
 
   adivinar(letra: string): void {

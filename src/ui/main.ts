@@ -3,9 +3,18 @@ import "./styles.css";
 
 const root = document.getElementById("app");
 
-function readWordFromQuery(): string {
+function crearJuegoDesdeQuery(): Ahorcado {
   const params = new URLSearchParams(window.location.search);
-  return params.get("word") || "CASA";
+
+  const wordsParam = params.get("words");
+  if (wordsParam) {
+    const lista = wordsParam.split(",").map((w) => w.trim());
+    const seed = parseInt(params.get("seed") ?? "0", 10);
+    return new Ahorcado(lista, seed);
+  }
+
+  const wordParam = params.get("word");
+  return new Ahorcado(wordParam || "CASA");
 }
 
 if (root) {
@@ -40,8 +49,7 @@ if (root) {
     </main>
   `;
 
-  const palabra = readWordFromQuery();
-  const juego = new Ahorcado(palabra);
+  const juego = crearJuegoDesdeQuery();
 
   const wordEl = root.querySelector("[data-testid=word]") as HTMLElement;
   const livesEl = root.querySelector("[data-testid=lives]") as HTMLElement;
