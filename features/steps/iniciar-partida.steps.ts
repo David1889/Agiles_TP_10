@@ -7,6 +7,10 @@ Given("una partida con la palabra {string}", async ({ page }, palabra: string) =
   await page.goto(`/?word=${encodeURIComponent(palabra)}`);
 });
 
+Given("una partida con la lista {string} y semilla {string}", async ({ page }, lista: string, seed: string) => {
+  await page.goto(`/?words=${encodeURIComponent(lista)}&seed=${seed}`);
+});
+
 When("la página arranca", async ({ page }) => {
   await page.waitForLoadState("networkidle");
 });
