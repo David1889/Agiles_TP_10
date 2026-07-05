@@ -1,6 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { Ahorcado } from "../src/domain/Ahorcado";
 
+describe("Ahorcado - Palabra al azar de una lista", () => {
+  it("con seed 0 elige la primera palabra de la lista", () => {
+    const juego = new Ahorcado(["SOL", "RELOJ", "AVION"], 0);
+    expect(juego.palabraEnmascarada()).toBe("_ _ _");
+  });
+});
+
 describe("Ahorcado", () => {
   it("inicializa con la palabra enmascarada y 6 vidas", () => {
     const juego = new Ahorcado("CASA");
