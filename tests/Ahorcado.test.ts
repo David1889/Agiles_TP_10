@@ -185,9 +185,30 @@ describe("Ahorcado", () => {
 });
 
 describe("Ahorcado - Dibujo progresivo", () => {
+  const ORDEN_PARTES = [
+    "cabeza",
+    "cuerpo",
+    "brazo-izquierdo",
+    "brazo-derecho",
+    "pierna-izquierda",
+    "pierna-derecha",
+  ];
+
   it("una partida nueva muestra solo la horca", () => {
     const juego = new Ahorcado("CASA");
 
     expect(juego.partesVisibles()).toEqual(["horca"]);
   });
+
+  it.each([1, 2, 3, 4, 5, 6])(
+    "con %i errores muestra la horca y las primeras partes en orden",
+    (errores) => {
+      const juego = new Ahorcado("CASA");
+
+      // letras que no están en CASA
+      "BDEFGH".slice(0, errores).split("").forEach((letra) => juego.adivinar(letra));
+
+      expect(juego.partesVisibles()).toEqual(["horca", ...ORDEN_PARTES.slice(0, errores)]);
+    }
+  );
 });
