@@ -183,3 +183,11 @@ describe("Ahorcado", () => {
     expect(juego.haGanado()).toBe(true);
   });
 });
+
+describe("Ahorcado - Dibujo progresivo", () => {
+  it("una partida nueva muestra solo la horca", () => {
+    const juego = new Ahorcado("CASA");
+
+    expect(juego.partesVisibles()).toEqual(["horca"]);
+  });
+});
