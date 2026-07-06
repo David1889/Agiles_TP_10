@@ -1,5 +1,13 @@
 export class Ahorcado {
   private static readonly VIDAS_INICIALES = 6;
+  private static readonly ORDEN_PARTES = [
+    "cabeza",
+    "cuerpo",
+    "brazo-izquierdo",
+    "brazo-derecho",
+    "pierna-izquierda",
+    "pierna-derecha",
+  ];
   static readonly PALABRAS_POR_DEFECTO = [
     "CASA", "GATO", "SOL", "PERRO", "AVION",
     "ARBOL", "FLOR", "LUNA", "NUBE", "RATON",
@@ -81,6 +89,7 @@ export class Ahorcado {
   }
 
   partesVisibles(): string[] {
-    return ["horca"];
+    const errores = Ahorcado.VIDAS_INICIALES - this.intentos;
+    return ["horca", ...Ahorcado.ORDEN_PARTES.slice(0, errores)];
   }
 }
