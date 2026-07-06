@@ -79,4 +79,8 @@ export class Ahorcado {
   palabraRevelada(): string {
     return this.palabra.split("").join(" ");
   }
+
+  partesVisibles(): string[] {
+    return ["horca"];
+  }
 }
