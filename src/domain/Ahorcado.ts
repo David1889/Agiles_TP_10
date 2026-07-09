@@ -9,9 +9,19 @@ export class Ahorcado {
     "pierna-derecha",
   ];
   static readonly PALABRAS_POR_DEFECTO = [
-    "CASA", "GATO", "SOL", "PERRO", "AVION",
-    "ARBOL", "FLOR", "LUNA", "NUBE", "RATON",
-  ];
+  "CASA",
+  "GATO",
+  "SOL",
+  "PERRO",
+  "AVION",
+  "ARBOL",
+  "FLOR",
+  "LUNA",
+  "NUBE",
+  "RATON",
+  "CAMIÓN",
+  "AÑO",
+];
   private readonly palabra: string;
   private intentos: number;
   private letrasAdivinadas: Set<string>;
