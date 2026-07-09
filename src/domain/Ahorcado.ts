@@ -35,19 +35,26 @@ export class Ahorcado {
   }
 
   adivinar(letra: string): void {
-    if (this.juegoTerminado()) return;
-    if (!this.esLetraValida(letra)) return;
-
-    const letraMayuscula = letra.toUpperCase();
-
-    if (this.letrasAdivinadas.has(letraMayuscula)) return;
-
-    this.letrasAdivinadas.add(letraMayuscula);
-
-    if (!this.palabra.includes(letraMayuscula)) {
-      this.intentos--;
-    }
+  if (!this.esLetraValida(letra) || this.juegoTerminado()) {
+    return;
   }
+
+  const letraNormalizada = this.normalizar(letra);
+
+  if (this.letrasAdivinadas.has(letraNormalizada)) {
+    return;
+  }
+
+  this.letrasAdivinadas.add(letraNormalizada);
+
+  const pertenece = this.palabra
+    .split("")
+    .some((caracter) => this.normalizar(caracter) === letraNormalizada);
+
+  if (!pertenece) {
+    this.intentos--;
+  }
+}
 
   esLetraValida(letra: string): boolean {
     return /^[a-zñ]$/i.test(letra);
@@ -62,13 +69,13 @@ export class Ahorcado {
   }
 
   palabraEnmascarada(): string {
-    return this.palabra
-      .split("")
-      .map((caracter) =>
-        this.letrasAdivinadas.has(caracter) ? caracter : "_"
-      )
-      .join(" ");
-  }
+  return this.palabra
+    .split("")
+    .map((caracter) =>
+      this.letrasAdivinadas.has(this.normalizar(caracter)) ? caracter : "_"
+    )
+    .join(" ");
+}
 
   vidas(): number {
     return this.intentos;
@@ -92,4 +99,12 @@ export class Ahorcado {
     const errores = Ahorcado.VIDAS_INICIALES - this.intentos;
     return ["horca", ...Ahorcado.ORDEN_PARTES.slice(0, errores)];
   }
+
+  private normalizar(letra: string): string {
+  return letra
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 }
