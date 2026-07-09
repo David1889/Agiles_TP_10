@@ -65,8 +65,8 @@ export class Ahorcado {
   }
 
   fueIntentada(letra: string): boolean {
-    return this.letrasAdivinadas.has(letra.toUpperCase());
-  }
+  return this.letrasAdivinadas.has(this.normalizar(letra));
+}
 
   palabraEnmascarada(): string {
   return this.palabra
@@ -82,10 +82,10 @@ export class Ahorcado {
   }
 
   haGanado(): boolean {
-    return this.palabra
-      .split("")
-      .every((letra) => this.letrasAdivinadas.has(letra));
-  }
+  return this.palabra
+    .split("")
+    .every((letra) => this.letrasAdivinadas.has(this.normalizar(letra)));
+}
 
   haPerdido(): boolean {
     return this.intentos === 0;
