@@ -219,4 +219,12 @@ describe("Ahorcado - Dibujo progresivo", () => {
   expect(juego.palabraEnmascarada()).toBe("_ _ _ _ Ó _");
   expect(juego.vidas()).toBe(6);
 });
+it("no considera N equivalente a Ñ", () => {
+  const juego = new Ahorcado("AÑO");
+
+  juego.adivinar("N");
+
+  expect(juego.palabraEnmascarada()).toBe("_ _ _");
+  expect(juego.vidas()).toBe(5);
+});
 });
