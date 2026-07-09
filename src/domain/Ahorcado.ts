@@ -103,8 +103,10 @@ export class Ahorcado {
   private normalizar(letra: string): string {
   return letra
     .toUpperCase()
+    .replace(/Ñ/g, "#")
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/#/g, "Ñ");
 }
 
 }
