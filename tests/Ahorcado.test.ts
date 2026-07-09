@@ -210,5 +210,13 @@ describe("Ahorcado - Dibujo progresivo", () => {
 
       expect(juego.partesVisibles()).toEqual(["horca", ...ORDEN_PARTES.slice(0, errores)]);
     }
-  );
+);
+  it("considera una vocal sin acento equivalente a una vocal acentuada", () => {
+  const juego = new Ahorcado("CAMIÓN");
+
+  juego.adivinar("O");
+
+  expect(juego.palabraEnmascarada()).toBe("_ _ _ _ Ó _");
+  expect(juego.vidas()).toBe(6);
+});
 });
