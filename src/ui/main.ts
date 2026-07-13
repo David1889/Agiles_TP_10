@@ -52,7 +52,6 @@ if (root) {
             autocomplete="off"
             aria-label="Adivinar una letra"
           />
-          <div class="keyboard" role="group" aria-label="Teclado del ahorcado"></div>
           <p class="hint">Escribí una letra y presioná Enter</p>
         </div>
       </section>
@@ -81,7 +80,6 @@ if (root) {
   const livesEl = root.querySelector("[data-testid=lives]") as HTMLElement;
   const messageEl = root.querySelector("[data-testid=message]") as HTMLElement;
   const input = root.querySelector("#guess-input") as HTMLInputElement;
-  const keyboardEl = root.querySelector(".keyboard") as HTMLElement;
 
   function render() {
     if (figureEl)
@@ -91,27 +89,6 @@ if (root) {
         .join("");
     if (wordEl) wordEl.textContent = juego.palabraEnmascarada();
     if (livesEl) livesEl.textContent = String(juego.vidas());
-    if (keyboardEl) {
-      const letras = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
-      keyboardEl.innerHTML = letras
-        .map((letra) => {
-          const usada = juego.fueIntentada(letra);
-          const clase = usada ? "key key--used" : "key";
-          return `<button type="button" class="${clase}" data-testid="key-${letra.toLowerCase()}" data-key="${letra}" ${usada ? "disabled" : ""}>${letra}</button>`;
-        })
-        .join("");
-
-      keyboardEl.querySelectorAll(".key").forEach((boton) => {
-        boton.addEventListener("click", () => {
-          const letra = boton.getAttribute("data-key") ?? "";
-          if (!juego.esLetraValida(letra) || juego.fueIntentada(letra) || juego.juegoTerminado()) {
-            return;
-          }
-          juego.adivinar(letra);
-          render();
-        });
-      });
-    }
     if (juego.haGanado()) {
       if (messageEl) messageEl.textContent = "GANASTE";
       input.disabled = true;
