@@ -1,5 +1,6 @@
 export class Ahorcado {
   private static readonly VIDAS_INICIALES = 6;
+  private static readonly ALFABETO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
   private static readonly ORDEN_PARTES = [
     "cabeza",
     "cuerpo",
@@ -77,6 +78,10 @@ export class Ahorcado {
   fueIntentada(letra: string): boolean {
   return this.letrasAdivinadas.has(this.normalizar(letra));
 }
+
+  letrasDisponibles(): string[] {
+    return Ahorcado.ALFABETO.filter((letra) => !this.fueIntentada(letra));
+  }
 
   palabraEnmascarada(): string {
   return this.palabra

@@ -133,6 +133,19 @@ describe("Ahorcado", () => {
     expect(juego.fueIntentada("A")).toBe(false);
   });
 
+  it("expone las letras que todavía no fueron intentadas", () => {
+    const juego = new Ahorcado("CASA");
+
+    expect(juego.letrasDisponibles()).toContain("A");
+    expect(juego.letrasDisponibles()).toContain("B");
+    expect(juego.letrasDisponibles()).toContain("Ñ");
+
+    juego.adivinar("A");
+
+    expect(juego.letrasDisponibles()).not.toContain("A");
+    expect(juego.letrasDisponibles()).toContain("B");
+  });
+
   it("esLetraValida es true para una sola letra", () => {
     const juego = new Ahorcado("CASA");
     expect(juego.esLetraValida("A")).toBe(true);
