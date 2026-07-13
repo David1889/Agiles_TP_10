@@ -134,6 +134,51 @@ body {
   gap: 10px;
 }
 
+.keyboard {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 8px;
+  padding: 8px 0 4px;
+  justify-items: center;
+}
+
+.keyboard button {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 46px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.keyboard button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  transform: translateY(-1px);
+}
+
+.keyboard button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  outline-offset: 2px;
+}
+
+.keyboard button:disabled {
+  background: var(--border);
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.88;
+}
+
+.keyboard button:nth-child(21) {
+  grid-column-start: 3;
+}
+
 .guess {
   width: 100%;
   max-width: 220px;
@@ -163,4 +208,9 @@ body {
   margin: 0;
   font-size: 0.8rem;
   color: var(--muted);
+}
+
+.board {
+  width: 100%;
+  max-width: 100%;
 }
