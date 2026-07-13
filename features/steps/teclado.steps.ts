@@ -25,3 +25,15 @@ Then("la letra {string} está marcada como no disponible", async ({ page }, letr
   const boton = page.getByRole("button", { name: letra });
   await expect(boton).toBeDisabled();
 });
+
+Then("la letra {string} se muestra como acertada", async ({ page }, letra: string) => {
+  const boton = page.getByRole("button", { name: letra });
+  await expect(boton).toBeDisabled();
+  await expect(page.getByTestId("word")).toContainText(letra);
+});
+
+Then("la letra {string} se muestra como fallada", async ({ page }, letra: string) => {
+  const boton = page.getByRole("button", { name: letra });
+  await expect(boton).toBeDisabled();
+  await expect(page.getByTestId("lives")).not.toHaveText("6");
+});

@@ -78,6 +78,10 @@ export class Ahorcado {
   return this.letrasAdivinadas.has(this.normalizar(letra));
 }
 
+  letraDisponible(letra: string): boolean {
+  return this.esLetraValida(letra) && !this.fueIntentada(letra);
+}
+
   palabraEnmascarada(): string {
   return this.palabra
     .split("")

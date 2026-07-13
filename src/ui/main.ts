@@ -43,6 +43,8 @@ if (root) {
 
         <div class="message" data-testid="message"></div>
 
+        <div class="keyboard" data-testid="keyboard"></div>
+
         <div class="controls">
           <input
             class="guess"
@@ -79,6 +81,7 @@ if (root) {
   const wordEl = root.querySelector("[data-testid=word]") as HTMLElement;
   const livesEl = root.querySelector("[data-testid=lives]") as HTMLElement;
   const messageEl = root.querySelector("[data-testid=message]") as HTMLElement;
+  const keyboardEl = root.querySelector("[data-testid=keyboard]") as HTMLElement;
   const input = root.querySelector("#guess-input") as HTMLInputElement;
 
   function render() {
@@ -89,6 +92,7 @@ if (root) {
         .join("");
     if (wordEl) wordEl.textContent = juego.palabraEnmascarada();
     if (livesEl) livesEl.textContent = String(juego.vidas());
+    if (keyboardEl) renderKeyboard();
     if (juego.haGanado()) {
       if (messageEl) messageEl.textContent = "GANASTE";
       input.disabled = true;
@@ -99,6 +103,26 @@ if (root) {
     } else {
       if (messageEl) messageEl.textContent = "";
     }
+  }
+
+  function renderKeyboard() {
+    if (!keyboardEl) return;
+
+    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    keyboardEl.innerHTML = letras
+      .map((letra) => {
+        const valido = juego.esLetraValida(letra);
+        const disponible = valido && juego.letraDisponible(letra);
+        return `
+          <button
+            type="button"
+            data-key="${letra}"
+            aria-label="${letra}"
+            ${disponible ? "" : "disabled"}
+          >${letra}</button>
+        `;
+      })
+      .join("");
   }
 
   // initial render
@@ -119,6 +143,17 @@ if (root) {
           render();
         }
       }
+    }
+  });
+
+  keyboardEl?.addEventListener("click", (event) => {
+    const button = (event.target as HTMLElement).closest("button[data-key]") as HTMLButtonElement | null;
+    if (!button || button.disabled) return;
+
+    const letra = button.dataset.key;
+    if (letra) {
+      juego.adivinar(letra);
+      render();
     }
   });
 }
